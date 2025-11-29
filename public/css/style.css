@@ -1,0 +1,124 @@
+body {
+  font-family: Arial, sans-serif;
+  background: url('https://static.crunchyroll.com/cr-acquisition/assets/img/start/hero/us-global/background-desktop.jpg') no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  min-height: 100vh;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(82,34,142,0.32);
+  pointer-events: none;
+  z-index: 0;
+}
+.container {
+  position: relative;
+  max-width: 500px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 28px;
+  border-radius: 10px;
+  box-shadow: 0 3px 16px #6d38a960;
+  text-align: center;
+  z-index: 1;
+}
+h1 {
+  font-size: 1.7em;
+  margin-bottom: 21px;
+  color: #7328b6;
+}
+.nav-buttons a,
+a {
+  display: inline-block;
+  margin: 10px 7px;
+  padding: 8px 17px;
+  background: #5e35b1;
+  color: #fff;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background 0.2s;
+  font-weight: bold;
+}
+.nav-buttons a:hover,
+a:hover {
+  background: #4a2588;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 13px;
+}
+label {
+  text-align: left;
+  margin-bottom: 2px;
+}
+input[type="text"], input[type="number"] {
+  padding: 8px;
+  border: 1px solid #dedede;
+  border-radius: 4px;
+  margin-bottom: 7px;
+}
+button {
+  background: #43a047;
+  color: #fff;
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 8px;
+  font-weight: bold;
+}
+button:hover {
+  background: #357a38;
+}
+ul { list-style: none; padding: 0; }
+.anime-card {
+  display: flex;
+  align-items: center;
+  background: #faf7fd;
+  border-radius: 10px;
+  margin-bottom: 17px;
+  box-shadow: 0 2px 10px #a678f355;
+  transition: transform 0.14s;
+  padding: 10px 14px;
+  gap: 14px;
+}
+.anime-card:hover { transform: translateY(-4px) scale(1.03); }
+.anime-card img {
+  width: 72px;
+  height: 104px;
+  object-fit: cover;
+  border-radius: 7px;
+  margin-right: 12px;
+  box-shadow: 0 4px 12px #734fd944;
+  flex-shrink: 0;
+}
+.anime-info {
+  flex: 1;
+  text-align: left;
+}
+.anime-title {
+  font-size: 1.15em;
+  color: #7927bc;
+  margin-bottom: 2px;
+  margin-top: 2px;
+  font-weight: bold;
+}
+.anime-desc {
+  color: #44418a;
+  font-size: 0.94em;
+  margin-bottom: 9px;
+}
+.anime-card a {
+  background: #ba68c8;
+  color: white;
+  border-radius: 6px;
+  padding: 3px 9px;
+  font-size: 0.93em;
+}
+.anime-card a:hover { background: #7c3fa0; }

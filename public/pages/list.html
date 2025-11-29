@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Series de Anime</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Lista de Series de Anime</h1>
+    <a href="new.html" style="margin-bottom:18px;display:inline-block;background:#43a047;padding:8px 20px;border-radius:7px;font-weight:bold;text-decoration:none;color:#fff;">+ Agregar serie</a>
+    <div id="anime-list">
+      <p>Cargando series...</p>
+    </div>
+    <a href="../index.html">Volver al Inicio</a>
+  </div>
+  <script>
+    fetch('/api/series')
+      .then(res => res.json())
+      .then(data => {
+        const elDiv = document.getElementById('anime-list');
+        if (Array.isArray(data) && data.length > 0) {
+          const ul = document.createElement('ul');
+          data.forEach(anime => {
+            const li = document.createElement('li');
+            li.className = "anime-card";
+            // Ajustar ruta para imágenes locales
+            let imgSrc = anime.imagen && anime.imagen.startsWith('image/') ? '../' + anime.imagen : anime.imagen;
+            li.innerHTML = `
+              <img src="${imgSrc}" alt="${anime.nombre}">
+              <div class="anime-info">
+                <div class="anime-title">${anime.nombre}</div>
+                <div class="anime-desc">${anime.descripcion}</div>
+                <a href="detail.html?id=${anime.id}">Detalle</a>
+              </div>
+            `;
+            ul.appendChild(li);
+          });
+          elDiv.innerHTML = '';
+          elDiv.appendChild(ul);
+        } else {
+          elDiv.textContent = 'No hay series registradas.';
+        }
+      })
+      .catch(() => {
+        document.getElementById('anime-list').textContent = 'Error al cargar las series.';
+      });
+  </script>
+</body>
+</html>

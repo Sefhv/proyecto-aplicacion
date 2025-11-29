@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalle de Serie de Anime</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .box {
+      background: #f5eafe;
+      border-radius: 11px;
+      box-shadow: 0 2px 10px #8b4dbb26;
+      padding: 1.2em 1.3em 1em 1.3em;
+      margin-bottom: 1.8em;
+      margin-top: 1em;
+      text-align: left;
+    }
+    #imagen-serie-box { text-align: center; }
+    @media (max-width: 600px) {
+      .box { padding: 0.6em 0.4em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Detalle de la Serie de Anime</h1>
+    <div id="imagen-serie-box" style="margin-bottom:1.5em;"></div>
+    <div class="box">
+      <h2 style="margin-top:0">Editar serie</h2>
+      <form id="detail-form">
+        <label for="nombre">Nombre de la Serie:</label>
+        <input type="text" id="nombre" name="nombre" required value="">
+        <label for="descripcion">Descripción:</label>
+        <input type="text" id="descripcion" name="descripcion" required value="">
+        <label for="imagen">Imagen (URL https o archivo en <code>image/</code>):</label>
+        <input type="text" id="imagen" name="imagen" required placeholder="https://... o naruto.jpg" value="">
+        <button type="submit">Guardar Cambios</button>
+      </form>
+      <div id="mensaje"></div>
+    </div>
+    <a href="../index.html">Volver al Inicio</a>
+    <a href="review.html?id=" id="resena-link" style="margin-top:12px;display:inline-block">Ir a reseñas de esta serie</a>
+  </div>
+  <script>
+    function getIdFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id');
+    }
+    const id = getIdFromUrl();
+    function mostrarImagen(url) {
+      // Corrige la ruta para imágenes locales
+      let realUrl = url ? (url.startsWith('image/') ? '../' + url : url) : '';
+      document.getElementById('imagen-serie-box').innerHTML = `<img src="${realUrl}" alt="serie" style="max-width:170px;max-height:250px;border-radius:14px;box-shadow:0 6px 24px #7328b622;">`;
+    }
+    function normalizarImagen(valor) {
+      if (!valor) return valor;
+      if (valor.startsWith('http://') || valor.startsWith('https://')) return valor;
+      if (valor.startsWith('public/image/')) return valor.replace('public/', '');
+      if (valor.startsWith('image/')) return valor;
+      return 'image/' + valor;
+    }
+    function cargarSerie() {
+      fetch(`/api/series/${id}`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('nombre').value = data.nombre || '';
+          document.getElementById('descripcion').value = data.descripcion || '';
+          document.getElementById('imagen').value = data.imagen || '';
+          mostrarImagen(data.imagen || '');
+          document.getElementById('resena-link').href = `review.html?id=${data.id}`;
+        })
+        .catch(() => {
+          document.getElementById('mensaje').textContent = 'Error al cargar los detalles de la serie.';
+        });
+    }
+    if (id) {
+      cargarSerie();
+    }
+    document.getElementById('detail-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const nombre = document.getElementById('nombre').value;
+      const descripcion = document.getElementById('descripcion').value;
+      const imagenRaw = document.getElementById('imagen').value.trim();
+      const imagen = normalizarImagen(imagenRaw);
+      fetch(`/api/series/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre, descripcion, imagen })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('mensaje').textContent = '¡Serie actualizada!';
+        mostrarImagen(imagen);
+      })
+      .catch(() => {
+        document.getElementById('mensaje').textContent = 'Error al actualizar la serie.';
+      });
+    });
+  </script>
+</body>
+</html>
