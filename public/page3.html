@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agregar Nueva Serie de Anime</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Agregar Serie de Anime</h1>
+    <form id="anime-form">
+      <label for="nombre">Nombre de la Serie:</label>
+      <input type="text" id="nombre" name="nombre" required placeholder="Ejemplo: Naruto">
+      <label for="descripcion">Descripción:</label>
+      <input type="text" id="descripcion" name="descripcion" required placeholder="Breve descripción">
+      <button type="submit">Guardar</button>
+    </form>
+    <div id="mensaje"></div>
+    <a href="../index.html">Volver al Inicio</a>
+  </div>
+  <script>
+    document.getElementById('anime-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const nombre = document.getElementById('nombre').value;
+      const descripcion = document.getElementById('descripcion').value;
+      fetch('/api/series', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre, descripcion })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('mensaje').textContent = '¡Serie agregada exitosamente!';
+        document.getElementById('anime-form').reset();
+      })
+      .catch(() => {
+        document.getElementById('mensaje').textContent = 'Error al agregar la serie.';
+      });
+    });
+  </script>
+</body>
+</html>

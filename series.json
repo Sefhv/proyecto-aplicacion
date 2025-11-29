@@ -1,0 +1,54 @@
+[
+  {
+    "id": 1,
+    "nombre": "Naruto",
+    "descripcion": "Un ninja con sueños de ser Hokage",
+    "imagen": "image/naruto.jpg",
+    "reviews": [
+      {
+        "usuario": "Juan",
+        "puntuacion": 10,
+        "comentario": "Una de mis favoritas!"
+      },
+      {
+        "usuario": "Andres",
+        "puntuacion": 8,
+        "comentario": "Recomiendo esta serie, es muy buena"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "nombre": "Fullmetal Alchemist: Brotherhood",
+    "descripcion": "Dos hermanos en busca de la piedra filosofal.",
+    "imagen": "image/fma-brotherhood.png",
+    "reviews": [
+      {
+        "usuario": "Pedro",
+        "puntuacion": 10,
+        "comentario": "Me trae buenos recuerdos esta serie"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "nombre": "Attack on Titan",
+    "descripcion": "La humanidad lucha contra titanes.",
+    "imagen": "image/aot.jpg",
+    "reviews": []
+  },
+  {
+    "id": 4,
+    "nombre": "One piece",
+    "descripcion": "Un día una extraña persona con un sombrero de paja aparece en medio del mar",
+    "imagen": "image/one-piece.png",
+    "reviews": []
+  },
+  {
+    "id": 5,
+    "nombre": "Code Geass",
+    "descripcion": "Una extraño misterio sucede en el pueblo de lelouch",
+    "imagen": "https://m.media-amazon.com/images/S/pv-target-images/726c67c269887e3d451dea71b221801ef28cc7b9928b8f91c7d0f86eb51e334f.jpg",
+    "reviews": []
+  }
+]

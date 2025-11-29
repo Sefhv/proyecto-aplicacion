@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detalle de Serie de Anime</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Detalle de la Serie de Anime</h1>
+    <form id="detail-form">
+      <label for="nombre">Nombre de la Serie:</label>
+      <input type="text" id="nombre" name="nombre" required value="">
+      <label for="descripcion">Descripción:</label>
+      <input type="text" id="descripcion" name="descripcion" required value="">
+      <button type="submit">Guardar Cambios</button>
+    </form>
+    <div id="mensaje"></div>
+    <h2>Reseñas</h2>
+    <div id="lista-reviews">Cargando reseñas...</div>
+    <h3>Agregar reseña</h3>
+    <form id="review-form">
+      <label for="usuario">Tu nombre:</label>
+      <input type="text" id="usuario" name="usuario" required placeholder="Nombre">
+      <label for="puntuacion">Puntuación (1-10):</label>
+      <input type="number" id="puntuacion" name="puntuacion" required min="1" max="10">
+      <label for="comentario">Comentario:</label>
+      <input type="text" id="comentario" name="comentario" required placeholder="¿Qué piensas de esta serie?">
+      <button type="submit">Agregar reseña</button>
+    </form>
+    <div id="mensaje-reseña"></div>
+    <a href="../index.html">Volver al Inicio</a>
+  </div>
+  <script>
+    function getIdFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id');
+    }
+    const id = getIdFromUrl();
+    function cargarSerie() {
+      fetch(`/api/series/${id}`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('nombre').value = data.nombre || '';
+          document.getElementById('descripcion').value = data.descripcion || '';
+        })
+        .catch(() => {
+          document.getElementById('mensaje').textContent = 'Error al cargar los detalles de la serie.';
+        });
+    }
+    function cargarReviews() {
+      fetch(`/api/series/${id}/reviews`)
+        .then(res => res.json())
+        .then(reviews => {
+          const div = document.getElementById('lista-reviews');
+          if(Array.isArray(reviews) && reviews.length > 0) {
+            div.innerHTML = '<ul>' + reviews.map(r => `<li><strong>${r.usuario}</strong> (${r.puntuacion}/10): ${r.comentario}</li>`).join('') + '</ul>';
+          } else {
+            div.textContent = 'No hay reseñas aún.';
+          }
+        })
+        .catch(() => {
+          document.getElementById('lista-reviews').textContent = 'Error al cargar reseñas.';
+        });
+    }
+    if (id) {
+      cargarSerie();
+      cargarReviews();
+    }
+    document.getElementById('detail-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const nombre = document.getElementById('nombre').value;
+      const descripcion = document.getElementById('descripcion').value;
+      fetch(`/api/series/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre, descripcion })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('mensaje').textContent = '¡Serie actualizada!';
+      })
+      .catch(() => {
+        document.getElementById('mensaje').textContent = 'Error al actualizar la serie.';
+      });
+    });
+    document.getElementById('review-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const usuario = document.getElementById('usuario').value;
+      const puntuacion = Number(document.getElementById('puntuacion').value);
+      const comentario = document.getElementById('comentario').value;
+      fetch(`/api/series/${id}/reviews`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usuario, puntuacion, comentario })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('mensaje-reseña').textContent = '¡Reseña agregada!';
+        document.getElementById('review-form').reset();
+        cargarReviews();
+      })
+      .catch(() => {
+        document.getElementById('mensaje-reseña').textContent = 'Error al agregar la reseña.';
+      });
+    });
+  </script>
+</body>
+</html>

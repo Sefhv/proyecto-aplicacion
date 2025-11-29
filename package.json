@@ -1,0 +1,24 @@
+{
+  "name": "proyecto-aplicacion",
+  "version": "1.0.0",
+  "description": "proyecto nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sefhv/proyecto-aplicacion.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sefhv/proyecto-aplicacion/issues"
+  },
+  "homepage": "https://github.com/Sefhv/proyecto-aplicacion#readme",
+  "dependencies": {
+    "express": "5.1.0",
+    "picocolors": "1.1.1"
+  }
+}

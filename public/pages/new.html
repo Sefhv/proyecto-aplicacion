@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agregar Nueva Serie de Anime</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Agregar Serie de Anime</h1>
+    <form id="anime-form">
+      <label for="nombre">Nombre de la Serie:</label>
+      <input type="text" id="nombre" name="nombre" required placeholder="Ejemplo: Naruto">
+      <label for="descripcion">Descripción:</label>
+      <input type="text" id="descripcion" name="descripcion" required placeholder="Breve descripción">
+      <label for="imagen">Imagen (URL):</label>
+      <input type="text" id="imagen" name="imagen" required placeholder="https://...">
+      <button type="submit">Guardar</button>
+    </form>
+    <div id="mensaje"></div>
+    <a href="../index.html">Volver al Inicio</a>
+  </div>
+  <script>
+    function normalizarImagen(valor) {
+      if (!valor) return valor;
+      // Si es URL absoluta, la dejamos tal cual
+      if (valor.startsWith('http://') || valor.startsWith('https://')) return valor;
+      // Quitar prefijo public/ si lo ponen
+      if (valor.startsWith('public/image/')) return valor.replace('public/', '');
+      // Si ya empieza por image/ lo dejamos
+      if (valor.startsWith('image/')) return valor;
+      // Si es solo el nombre de archivo, lo guardamos bajo image/
+      return 'image/' + valor;
+    }
+
+    document.getElementById('anime-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const nombre = document.getElementById('nombre').value;
+      const descripcion = document.getElementById('descripcion').value;
+      const imagenRaw = document.getElementById('imagen').value.trim();
+      const imagen = normalizarImagen(imagenRaw);
+      fetch('/api/series', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre, descripcion, imagen })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('mensaje').textContent = '¡Serie agregada exitosamente!';
+        document.getElementById('anime-form').reset();
+      })
+      .catch(() => {
+        document.getElementById('mensaje').textContent = 'Error al agregar la serie.';
+      });
+    });
+  </script>
+</body>
+</html>

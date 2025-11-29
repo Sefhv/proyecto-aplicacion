@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Series de Anime</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Lista de Series de Anime</h1>
+    <div id="anime-list">
+      <p>Cargando series...</p>
+    </div>
+    <a href="../index.html">Volver al Inicio</a>
+  </div>
+  <script>
+    fetch('/api/series')
+      .then(res => res.json())
+      .then(data => {
+        const elDiv = document.getElementById('anime-list');
+        if (Array.isArray(data) && data.length > 0) {
+          const ul = document.createElement('ul');
+          data.forEach(anime => {
+            const li = document.createElement('li');
+            li.innerHTML = `<strong>${anime.nombre}</strong>: ${anime.descripcion} <a href="detail.html?id=${anime.id}">Detalle</a>`;
+            ul.appendChild(li);
+          });
+          elDiv.innerHTML = '';
+          elDiv.appendChild(ul);
+        } else {
+          elDiv.textContent = 'No hay series registradas.';
+        }
+      })
+      .catch(() => {
+        document.getElementById('anime-list').textContent = 'Error al cargar las series.';
+      });
+  </script>
+</body>
+</html>
